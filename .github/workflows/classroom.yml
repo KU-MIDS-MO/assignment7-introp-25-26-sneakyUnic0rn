@@ -1,0 +1,44 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: test_build_pipeline.py
+      id: test_build_pipeline-py
+      uses: classroom-resources/autograding-python-grader@v1
+      with:
+        timeout: 10
+        max-score: 5
+        setup-command: pip install pytest
+    - name: test_make_account.py
+      id: test_make_account-py
+      uses: classroom-resources/autograding-python-grader@v1
+      with:
+        timeout: 10
+        max-score: 5
+        setup-command: pip install pytest
+    - name: test_safe_call.py
+      id: test_safe_call-py
+      uses: classroom-resources/autograding-python-grader@v1
+      with:
+        timeout: 10
+        max-score: 5
+        setup-command: pip install pytest
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        TEST_BUILD_PIPELINE-PY_RESULTS: "${{steps.test_build_pipeline-py.outputs.result}}"
+        TEST_MAKE_ACCOUNT-PY_RESULTS: "${{steps.test_make_account-py.outputs.result}}"
+        TEST_SAFE_CALL-PY_RESULTS: "${{steps.test_safe_call-py.outputs.result}}"
+      with:
+        runners: test_build_pipeline-py,test_make_account-py,test_safe_call-py
