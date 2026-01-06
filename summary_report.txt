@@ -1,0 +1,9 @@
+
+Facility Booking Summary Report
+Total facilities     : 3
+Available facilities : 2
+Booked facilities    : 1
+Booking percentage   : 33.33%
+
+Booked Facility Details: 
+- Chamber Of Secrets (Capacity: 50, Booked by: Booked)
